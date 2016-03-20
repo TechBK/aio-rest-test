@@ -1,2 +1,6 @@
+aiohttp_jinja2
 aiohttp
 motor
+aiohttp_session[secure]
+cryptography
+aiohttp_cors
