@@ -2,8 +2,8 @@ import asyncio
 from bson import json_util
 import hashlib
 from aiohttp_session import get_session
-from aio_rest_test.utils import views
-from aio_rest_test.utils.coroutine import handle_errors
+from notes_apps.utils import views
+from notes_apps.utils.coroutine import handle_errors
 
 
 def login_required(func = None):

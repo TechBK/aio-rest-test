@@ -16,7 +16,4 @@ import jinja2
 def setup(app):
     env = aiohttp_jinja2.setup(app,
                                loader=jinja2.FileSystemLoader('templates'))
-    # env.globals.update({
-    #     ''
-    # })
     return env

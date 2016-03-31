@@ -1,7 +1,7 @@
 import asyncio
-from aio_rest_test.utils import views
-from aio_rest_test.utils.coroutine import handle_errors
-from aio_rest_test.users import login_required
+from aio_framework.utils import views
+from aio_framework.utils.coroutine import handle_errors
+from notes_apps.users.utils import login_required
 
 
 class NoteView(views.DetailView):
@@ -23,7 +23,7 @@ class NotesView(views.ListView):
         Khi nguoi dung da dang nhap, muon xem note cua ban than
         :return:
         """
-        current_user = yield from self.get_user_session()
+        current_user = self.user
         cursor = self.coll.find({'users': {'$all': current_user['login']}})
         documents = yield from cursor.to_list(length=20)
         return self.response(documents)
@@ -32,7 +32,7 @@ class NotesView(views.ListView):
     @login_required
     @asyncio.coroutine
     def post(self):
-        current_user = yield from self.get_user_session()
+        current_user = self.user
         data = yield from self.data()
         if not isinstance(data, list):
             data = [data]
@@ -79,7 +79,6 @@ class NotesOfUser(views.ListView):
     @asyncio.coroutine
     def post(self):
         login = self.request.match_info.get('login')
-        #check user ton tai
         user = yield from self.request.app['db'].users.find_one({'login': login}, {'login': 1})
         data = yield from self.data()
         assert data, 'Post Note'

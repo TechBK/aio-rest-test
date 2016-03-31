@@ -2,21 +2,23 @@ from aiohttp import web
 import asyncio
 import aiohttp_jinja2
 from bson import json_util, objectid
-from aio_rest_test.utils.coroutine import handle_errors
+from notes_apps.utils.coroutine import handle_errors
 from aiohttp_session import get_session
 
 
 class View(web.View):
 
-    @asyncio.coroutine
-    def get_user_session(self):
-        """
-        Before run it, must to wrrap handle request function by @login_required!
-        :return: current user or {}
-        """
-        session = yield from get_session(self.request)
-        user = session.get('user', '{}')
-        return json_util.loads(user)
+    # @asyncio.coroutine
+    # def get_user_session(self):
+    #     """
+    #     Before run it, must to wrrap handle request function by @login_required!
+    #     :return: current user or {}
+    #     """
+    #     session = yield from get_session(self.request)
+    #     user = session.get('user', '{}')
+    #     return json_util.loads(user)
+
+    user = None
 
     @property
     def coll(self):
@@ -32,10 +34,7 @@ class View(web.View):
 
     def response(self, document):
         if self.json:
-            # headers = {'Access-Control-Allow-Origin': '*',
-            #            'Access-Control-Request-Method': '*',
-            #            'Access-Control-Allow-Headers': '*'
-            #            }
+
             return web.Response(body=json_util.dumps(document, sort_keys=True, indent=4).encode())
         context = {'json': json_util.dumps(document, sort_keys=True, indent=4)}
         return aiohttp_jinja2.render_template('/base/json.html',

@@ -4,8 +4,8 @@ FLAGS=
 
 
 flake:
-	flake8 aio_rest_test
-
+	flake8 aio_framework
+	flake8 notes_app
 
 ntest:
 	python3 -m "nose" -s $(FLAGS) ./aio_rest_test/tests/

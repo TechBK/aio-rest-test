@@ -1,14 +1,18 @@
 import asyncio
 import unittest
-from aio_rest_test.service import init
+import notes_apps.notes_app
+# from notes_apps.notes_app import app, mongo_setup
 import socket
 import aiohttp
 from bson import json_util
 
 
+
 class TestNoteUrl(unittest.TestCase):
     def setUp(self):
         self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(None)
+
         self.user_data = {
             'login': 'quangbinh',
             'password1': 'baogavn',
@@ -18,7 +22,9 @@ class TestNoteUrl(unittest.TestCase):
             'login': 'quangbinh',
             'password': 'baogavn'
         }
-        asyncio.set_event_loop(None)
+        self.ip = '127.0.0.1'
+        self.loop.run_until_complete(mongo_setup(self.loop, app, test=False))
+
 
     def tearDown(self):
         self.srv.close()
@@ -28,7 +34,7 @@ class TestNoteUrl(unittest.TestCase):
 
     def find_unused_port(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(('127.0.0.1', 0))
+        s.bind((self.ip, 0))
         port = s.getsockname()[1]
         s.close()
         return port
@@ -36,8 +42,11 @@ class TestNoteUrl(unittest.TestCase):
     @asyncio.coroutine
     def create_server_and_user_and_login(self, session):
         port = self.find_unused_port()
-        self.srv, self.app, self.handler = \
-            yield from init(self.loop, port=port, test=True)
+        # self.srv, self.app, self.handler = \
+        #     yield from init(self.loop, port=port, test=True)
+
+
+        self.srv = self.loop.create_server(app.make_handler(), self.ip, port)
 
         url = "http://127.0.0.1:{}".format(port)
 

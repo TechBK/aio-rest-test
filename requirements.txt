@@ -4,3 +4,4 @@ motor
 aiohttp_session[secure]
 cryptography
 aiohttp_cors
+pyjwt

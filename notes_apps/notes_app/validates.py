@@ -40,25 +40,31 @@ class Users(ValidateSetup):
     validator = [
         {
             '_id':
-            {
-                '$exists': True,
-                '$type': 'objectId'
-            }
+                {
+                    '$exists': True,
+                    '$type': 'objectId'
+                }
         },
         {
             'login':
-            {
-                '$exists': True,
-                '$type': 'string'
+                {
+                    '$exists': True,
+                    '$type': 'string'
 
-            }
+                }
         },
         {
             'password':
-            {
-                '$exists': True,
-                '$type': 'string'
-            }
+                {
+                    '$exists': True,
+                    '$type': 'string'
+                }
+        },
+        {
+            'last_login':
+                {
+
+                }
         }
     ]
 
